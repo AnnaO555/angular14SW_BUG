@@ -1,0 +1,20 @@
+{
+  "start_url": "./",
+  "_version": "1.37.0",
+  "sap.app": {
+    "id": "",
+    "type": "application",
+    "title": "",
+    "applicationVersion": {
+      "version": ""
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": false,
+      "tablet": false,
+      "phone": false
+    }
+  }
+}

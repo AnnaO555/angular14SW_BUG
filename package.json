@@ -1,0 +1,45 @@
+{
+  "name": "acoach-v12",
+  "version": "12.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start:local-dev": "ng serve -c dev --ssl --ssl-key src/config/ssl/localhost.key --ssl-cert src/config/ssl/localhost.crt",
+    "build": "ng build --source-map=true",
+    "test": "ng test",
+    "watch": "ng build --watch --configuration development",
+    "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
+    "e2e": "ng e2e",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "start-pwa": "ng build --baseHref=/ --deployUrl=/ && http-server -p 8080 -c-1 dist/acoach-v12",
+    "lint": "ng lint",
+    "updateBuild": "node ./replace.build.js",
+    "postinstall": "ngcc"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/cdk": "^14.2.0",
+    "@angular/common": "^14.2.0",
+    "@angular/compiler": "^14.2.0",
+    "@angular/core": "^14.2.0",
+    "@angular/forms": "^14.2.0",
+    "@angular/router": "^14.2.0",
+    "@angular/platform-browser": "^14.2.0",
+    "@angular/platform-browser-dynamic": "^14.2.0",
+    "@angular/service-worker": "^14.2.0",
+    "event-source-polyfill": "^1.0.26",
+    "node": "^14.15.0",
+    "webpack": "^5.74.0",
+    "zone.js": "~0.11.8"
+  },
+  "devDependencies": {
+    "@angular-builders/jest": "^14.0.1",
+    "@angular-devkit/build-angular": "^14.2.2",
+    "@angular/cli": "^14.2.1",
+    "@angular/compiler-cli": "^14.2.0",
+    "@angular/elements": "^14.2.0",
+    "@compodoc/compodoc": "^1.1.15",
+    "@types/node": "^12.11.1",
+    "typescript": "~4.7.3"
+  }
+}

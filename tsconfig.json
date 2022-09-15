@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "target": "es2020",
+    "module": "es2020",
+    "lib": ["es2020", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["./src/app/*"],
+      "@acoach/*": ["./src/@acoach/*"],
+      "@environments/*": ["./src/environments/*"],
+      "@ui-base-components/*": ["./src/@acoach/ui-base-components/*"],
+      "@ui-business-components/*": ["./src/@acoach/ui-business-components/*"],
+      "@features/*": ["./src/@acoach/features/*"],
+      "@const/*": ["./src/@acoach/const/*"],
+      "@data-access/*": ["./src/@acoach/data-access/*"],
+      "@models/*": ["./src/@acoach/models/*"],
+      "@utils/*": ["./src/@acoach/utils/*"],
+      "@guards/*": ["./src/@acoach/guards/*"]
+    }
+  }
+}

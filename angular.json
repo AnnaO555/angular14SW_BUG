@@ -1,0 +1,179 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false,
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
+  },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "acoach-v12": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "acoach",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "baseHref": "/web/",
+            "outputPath": "dist/acoach-v12",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "src/favicon.svg",
+              "src/assets",
+              "src/manifest.json",
+              "src/web.config",
+              "src/service-worker.js"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/",
+                "src/@acoach/styles"
+              ]
+            },
+            "styles": [
+              "src/styles.scss"
+            ],
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "12mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "8kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
+            "dev": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "acoach-v12:build:production"
+            },
+            "development": {
+              "browserTarget": "acoach-v12:build:development"
+            },
+            "dev": {
+              "browserTarget": "acoach-v12:build:dev"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "acoach-v12:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "jestConfig": [
+              "src/jest.config.js"
+            ],
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
+            "passWithNoTests": true
+          }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "acoach-v12:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "acoach-v12:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "acoach-v12:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "acoach-v12:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

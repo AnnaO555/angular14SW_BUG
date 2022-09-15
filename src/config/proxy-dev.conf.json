@@ -1,0 +1,16 @@
+{
+  "/api-core/*": {
+    "target": "https://localhost:44385",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {"^/api-core" : ""}
+  },
+  "/api-authentication/*": {
+    "target": "https://localhost:44394",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {"^/api-authentication" : ""}
+  }
+}

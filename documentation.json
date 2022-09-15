@@ -1,0 +1,2573 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "IAppState",
+            "id": "interface-IAppState-1a7cdb68f22a04b5275df01539158891",
+            "file": "src/@acoach/data-access/app.state.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface IAppState {}\r\n",
+            "properties": [],
+            "indexSignatures": [],
+            "methods": []
+        },
+        {
+            "name": "IAuthState",
+            "id": "interface-IAuthState-001d8744e8fa28c0e16128f6364f35ab",
+            "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import {Action, createReducer, on} from '@ngrx/store';\r\nimport {HttpErrorResponse} from '@angular/common/http';\r\nimport * as fromRoot from '@acoach/data-access/app.state';\r\nimport * as fromAuthActions from '@acoach/data-access/auth/auth.actions';\r\nimport {IUserDetails} from \"@acoach/models/auth/auth.interface\";\r\n\r\nexport const authFeatureKey = 'auth';\r\n\r\nexport interface IAuthState extends fromRoot.IAppState {\r\n  loading: boolean;\r\n  error: HttpErrorResponse;\r\n  username: string;\r\n  userDetails: IUserDetails;\r\n}\r\n\r\nexport const authInitialState: IAuthState = {\r\n  loading: false,\r\n  error: null,\r\n  username: '',\r\n  userDetails: null,\r\n};\r\n\r\nconst authReducer = createReducer(\r\n  authInitialState,\r\n  on(fromAuthActions.clearState, state => ({...state, loading: false, isError: null})),\r\n\r\n  on(fromAuthActions.login, (state, {username}) => ({...state, loading: true, username})),\r\n  on(fromAuthActions.loginSuccess, (state, {userDetails}) => ({...state, loading: false, userDetails})),\r\n  on(fromAuthActions.loginError, (state, {error}) => ({...state, loading: false, error})),\r\n);\r\n\r\nexport function reducer(state: IAuthState | undefined, action: Action): IAuthState {\r\n  return authReducer(state, action);\r\n}\r\n\r\n// tslint:disable-next-line:typedef\r\nexport function clearState(red: (state: {}, action: Action) => any) {\r\n  return (state: {}, action: Action) => {\r\n    if (action.type === fromAuthActions.clearState.type) {\r\n      state = undefined;\r\n    }\r\n    return red(state, action);\r\n  };\r\n}\r\n",
+            "properties": [
+                {
+                    "name": "error",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "HttpErrorResponse",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "loading",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                },
+                {
+                    "name": "userDetails",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "IUserDetails",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                },
+                {
+                    "name": "username",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 164,
+            "methods": []
+        },
+        {
+            "name": "IRouterState",
+            "id": "interface-IRouterState-e8e16889f8f40b481b5f2e7c1d597040",
+            "file": "src/@acoach/data-access/route/route.selectors.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { createFeatureSelector, createSelector } from '@ngrx/store';\r\nimport * as fromRouter from '@ngrx/router-store';\r\nimport * as fromRoot from '@acoach/data-access/app.state';\r\n\r\nexport const routeFeatureKey = 'router';\r\nexport interface IRouterState extends fromRoot.IAppState {\r\n  router: fromRouter.RouterReducerState;\r\n}\r\n\r\nexport const selectRouter = createFeatureSelector<IRouterState, fromRouter.RouterReducerState>(routeFeatureKey);\r\n\r\nexport const {\r\n  selectCurrentRoute,\r\n  selectQueryParams,\r\n  selectQueryParam,\r\n  selectRouteParams,\r\n  selectRouteParam,\r\n  selectRouteData,\r\n  selectUrl\r\n} = fromRouter.getSelectors(selectRouter);\r\n\r\nexport const selectRouteOutletPath = createSelector(selectCurrentRoute, currentRoute =>\r\n  currentRoute.routeConfig.outlet ? currentRoute.routeConfig.path : ''\r\n);\r\n",
+            "properties": [
+                {
+                    "name": "router",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "fromRouter.RouterReducerState",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 164,
+            "methods": []
+        },
+        {
+            "name": "ISession",
+            "id": "interface-ISession-6c9ef91645f8111dca955f209ae7be51",
+            "file": "src/@acoach/models/auth/auth.interface.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface IUser {\r\n  username: string;\r\n  firstname?: string;\r\n  lastname?: string;\r\n  territoryNumber: string;\r\n}\r\n\r\nexport interface ISession {\r\n  expiryDate: number;\r\n  accessToken: string;\r\n}\r\n\r\nexport interface IUserDetails {\r\n  userDetails: IUser,\r\n  sessionDetails: ISession\r\n}\r\n",
+            "properties": [
+                {
+                    "name": "accessToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                },
+                {
+                    "name": "expiryDate",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 164,
+            "methods": []
+        },
+        {
+            "name": "IUser",
+            "id": "interface-IUser-6c9ef91645f8111dca955f209ae7be51",
+            "file": "src/@acoach/models/auth/auth.interface.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface IUser {\r\n  username: string;\r\n  firstname?: string;\r\n  lastname?: string;\r\n  territoryNumber: string;\r\n}\r\n\r\nexport interface ISession {\r\n  expiryDate: number;\r\n  accessToken: string;\r\n}\r\n\r\nexport interface IUserDetails {\r\n  userDetails: IUser,\r\n  sessionDetails: ISession\r\n}\r\n",
+            "properties": [
+                {
+                    "name": "firstname",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": true,
+                    "description": "",
+                    "line": 3
+                },
+                {
+                    "name": "lastname",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": true,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "territoryNumber",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "username",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 164,
+            "methods": []
+        },
+        {
+            "name": "IUserDetails",
+            "id": "interface-IUserDetails-6c9ef91645f8111dca955f209ae7be51",
+            "file": "src/@acoach/models/auth/auth.interface.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface IUser {\r\n  username: string;\r\n  firstname?: string;\r\n  lastname?: string;\r\n  territoryNumber: string;\r\n}\r\n\r\nexport interface ISession {\r\n  expiryDate: number;\r\n  accessToken: string;\r\n}\r\n\r\nexport interface IUserDetails {\r\n  userDetails: IUser,\r\n  sessionDetails: ISession\r\n}\r\n",
+            "properties": [
+                {
+                    "name": "sessionDetails",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ISession",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                },
+                {
+                    "name": "userDetails",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "IUser",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 164,
+            "methods": []
+        }
+    ],
+    "injectables": [
+        {
+            "name": "AuthEffects",
+            "id": "injectable-AuthEffects-429744a5f100762bb9d0e965fbff8f22",
+            "file": "src/@acoach/data-access/auth/auth.effects.ts",
+            "properties": [
+                {
+                    "name": "appTimeOut$",
+                    "defaultValue": "createEffect(() =>\r\n    this._actions$.pipe(\r\n      ofType(fromAuthActions.loginSuccess),\r\n      tap(() => this._router.navigateByUrl('/dashboard')),\r\n      map(action => action.userDetails),\r\n      tap(({sessionDetails}) => timer(sessionDetails.expiryDate).subscribe(\r\n        () => this._authService.logout()\r\n        )\r\n      )\r\n    ),\r\n    {dispatch: false}\r\n  )",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 25,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "loginSupplier$",
+                    "defaultValue": "createEffect(() =>\r\n    this._actions$.pipe(\r\n      ofType(fromAuthActions.login),\r\n      map(action => action.username),\r\n      switchMap((username: string) =>\r\n        this._authService.login(username).pipe(\r\n          map((userDetails: IUserDetails) => fromAuthActions.loginSuccess({ userDetails })),\r\n          catchError(error => of(fromAuthActions.loginError({ error })))\r\n        )\r\n      )\r\n    )\r\n  )",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12,
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "methods": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from '@angular/core';\r\nimport {Actions, createEffect, ofType} from '@ngrx/effects';\r\nimport {catchError, map, switchMap, tap} from 'rxjs/operators';\r\nimport {of, timer} from 'rxjs';\r\nimport * as fromAuthActions from '@acoach/data-access/auth/auth.actions';\r\nimport {AuthService} from '@acoach/data-access/auth/service/auth.service';\r\nimport {IUserDetails} from \"@acoach/models/auth/auth.interface\";\r\nimport {Router} from \"@angular/router\";\r\n\r\n@Injectable()\r\nexport class AuthEffects {\r\n  public loginSupplier$ = createEffect(() =>\r\n    this._actions$.pipe(\r\n      ofType(fromAuthActions.login),\r\n      map(action => action.username),\r\n      switchMap((username: string) =>\r\n        this._authService.login(username).pipe(\r\n          map((userDetails: IUserDetails) => fromAuthActions.loginSuccess({ userDetails })),\r\n          catchError(error => of(fromAuthActions.loginError({ error })))\r\n        )\r\n      )\r\n    )\r\n  );\r\n\r\n  public appTimeOut$ = createEffect(() =>\r\n    this._actions$.pipe(\r\n      ofType(fromAuthActions.loginSuccess),\r\n      tap(() => this._router.navigateByUrl('/dashboard')),\r\n      map(action => action.userDetails),\r\n      tap(({sessionDetails}) => timer(sessionDetails.expiryDate).subscribe(\r\n        () => this._authService.logout()\r\n        )\r\n      )\r\n    ),\r\n    {dispatch: false}\r\n  );\r\n\r\n  constructor(\r\n    private _actions$: Actions,\r\n    private _authService: AuthService,\r\n    private _router: Router,\r\n  ) {}\r\n\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "_actions$",
+                        "type": "Actions",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "_authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "_router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 36,
+                "jsdoctags": [
+                    {
+                        "name": "_actions$",
+                        "type": "Actions",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "_authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "_router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "AuthFacade",
+            "id": "injectable-AuthFacade-142ca972a45bfb081b67fcb3da5baea8",
+            "file": "src/@acoach/data-access/auth/auth.facade.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getUserDetails",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<IUserDetails>",
+                    "typeParameters": [],
+                    "line": 29,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "login",
+                    "args": [
+                        {
+                            "name": "username",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 20,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "username",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "logout",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 24,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import {Injectable} from \"@angular/core\";\r\nimport {IAppState} from \"@acoach/data-access/app.state\";\r\nimport {select, Store} from \"@ngrx/store\";\r\nimport {Observable} from \"rxjs\";\r\nimport {IUserDetails} from \"@acoach/models/auth/auth.interface\";\r\nimport * as fromAuthActions from '@acoach/data-access/auth/auth.actions';\r\nimport * as fromAuthSelectors from '@acoach/data-access/auth/auth.selectors';\r\nimport {filter} from \"rxjs/operators\";\r\nimport {AuthService} from \"@acoach/data-access/auth/service/auth.service\";\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class AuthFacade {\r\n\r\n  public get accessToken(): string {\r\n    return this._authService.accessToken;\r\n  }\r\n\r\n  login(username: string): void {\r\n    this._store.dispatch(fromAuthActions.login({username}));\r\n  }\r\n\r\n  logout(): void {\r\n    this._store.dispatch(fromAuthActions.clearState());\r\n    this._authService.logout();\r\n  }\r\n\r\n  getUserDetails(): Observable<IUserDetails> {\r\n    return this._store.pipe(\r\n      select(fromAuthSelectors.getUserDetails),\r\n      filter(details => !!details)\r\n    );\r\n  }\r\n\r\n  constructor(\r\n    private _store: Store<IAppState>,\r\n    private _authService: AuthService\r\n  ) {\r\n  }\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "_store",
+                        "type": "Store<IAppState>",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "_authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 34,
+                "jsdoctags": [
+                    {
+                        "name": "_store",
+                        "type": "Store<IAppState>",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "_authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "accessors": {
+                "accessToken": {
+                    "name": "accessToken",
+                    "getSignature": {
+                        "name": "accessToken",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 16
+                    }
+                }
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "AuthService",
+            "id": "injectable-AuthService-24b4d6eca808c4476c6fa6c7a7761387",
+            "file": "src/@acoach/data-access/auth/service/auth.service.ts",
+            "properties": [
+                {
+                    "name": "_accessToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "modifierKind": [
+                        121
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "login",
+                    "args": [
+                        {
+                            "name": "username",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<IUserDetails>",
+                    "typeParameters": [],
+                    "line": 23,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "username",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "logout",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 39,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "redirectToLogin",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 44,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import {Injectable} from '@angular/core';\r\nimport {Observable, of} from 'rxjs';\r\nimport {IUserDetails} from \"@acoach/models/auth/auth.interface\";\r\nimport {Router} from \"@angular/router\";\r\nimport {tap} from \"rxjs/operators\";\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class AuthService {\r\n  private _accessToken: string;\r\n\r\n  constructor(private _router: Router) {}\r\n\r\n  public get accessToken(): string {\r\n    return this._accessToken;\r\n  }\r\n\r\n  private set accessToken(accessToken: string) {\r\n    this._accessToken = accessToken;\r\n  }\r\n\r\n  public login(username: string): Observable<IUserDetails> {\r\n    return of({\r\n      userDetails: {\r\n        username: 'Mike',\r\n        firstname: 'Michael',\r\n        lastname: 'Ortega',\r\n        territoryNumber: 'SW153BY'\r\n      },\r\n      sessionDetails: {\r\n        expiryDate: 30000, // 30 sec\r\n        accessToken: 'accessToken'\r\n      }\r\n    }).pipe(tap(({sessionDetails}) => this.accessToken = sessionDetails.accessToken))\r\n\r\n  }\r\n\r\n  logout(): void {\r\n    sessionStorage.clear();\r\n    this.redirectToLogin();\r\n  }\r\n\r\n  public redirectToLogin(): void {\r\n    this._router.navigate(['auth/login']);\r\n  }\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "_router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 11,
+                "jsdoctags": [
+                    {
+                        "name": "_router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "accessors": {
+                "accessToken": {
+                    "name": "accessToken",
+                    "setSignature": {
+                        "name": "accessToken",
+                        "type": "void",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "args": [
+                            {
+                                "name": "accessToken",
+                                "type": "string",
+                                "deprecated": false,
+                                "deprecationMessage": ""
+                            }
+                        ],
+                        "returnType": "void",
+                        "line": 19,
+                        "jsdoctags": [
+                            {
+                                "name": "accessToken",
+                                "type": "string",
+                                "deprecated": false,
+                                "deprecationMessage": "",
+                                "tagName": {
+                                    "text": "param"
+                                }
+                            }
+                        ]
+                    },
+                    "getSignature": {
+                        "name": "accessToken",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 15
+                    }
+                }
+            },
+            "type": "injectable"
+        }
+    ],
+    "guards": [
+        {
+            "name": "AuthGuard",
+            "id": "injectable-AuthGuard-52d71aa72b48141fa38a150958862bab",
+            "file": "src/@acoach/guards/auth.guard.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "canActivate",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "boolean",
+                    "typeParameters": [],
+                    "line": 16,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import {Injectable} from '@angular/core';\r\nimport {CanActivate, NavigationEnd, Router} from '@angular/router';\r\nimport {AuthFacade} from \"@acoach/data-access/auth/auth.facade\";\r\nimport {filter} from \"rxjs/operators\";\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class AuthGuard implements CanActivate {\r\n\r\n  constructor(\r\n    private _authFacade: AuthFacade,\r\n    private _router: Router\r\n  ) {}\r\n\r\n  public canActivate(): boolean {\r\n    this._router.events.pipe(filter(val => val instanceof NavigationEnd))\r\n      .subscribe((val: NavigationEnd) => {\r\n        if (!this._authFacade.accessToken) {\r\n          this._authFacade.logout();\r\n          return false;\r\n        }\r\n      });\r\n    return true;\r\n  }\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "_authFacade",
+                        "type": "AuthFacade",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "_router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 9,
+                "jsdoctags": [
+                    {
+                        "name": "_authFacade",
+                        "type": "AuthFacade",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "_router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "guard"
+        }
+    ],
+    "interceptors": [
+        {
+            "name": "TokenInterceptor",
+            "id": "injectable-TokenInterceptor-a765d45c14457c9ab6f795fe7384c575",
+            "file": "src/@acoach/interceptors/token.interceptor.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "intercept",
+                    "args": [
+                        {
+                            "name": "request",
+                            "type": "HttpRequest<any>",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "next",
+                            "type": "HttpHandler",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<HttpEvent<any>>",
+                    "typeParameters": [],
+                    "line": 14,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "request",
+                            "type": "HttpRequest<any>",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "next",
+                            "type": "HttpHandler",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';\r\nimport {Observable, of, throwError} from 'rxjs';\r\nimport {catchError} from 'rxjs/operators';\r\nimport {Injectable} from '@angular/core';\r\nimport {MatSnackBar} from '@angular/material/snack-bar';\r\nimport {AuthFacade} from \"@acoach/data-access/auth/auth.facade\";\r\n\r\n@Injectable()\r\nexport class TokenInterceptor implements HttpInterceptor {\r\n\r\n  constructor(private _authFacade: AuthFacade, private _snackBar: MatSnackBar) {\r\n  }\r\n\r\n  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {\r\n\r\n    return next.handle(request).pipe(\r\n      catchError(err => {\r\n        if (err.status === 401 || err.status === 403) {\r\n          this._authFacade.logout();\r\n          const msg = `Status ${err.status}. You are not authorized, please log in`;\r\n          this._snackBar.open(msg, '', {duration: 3000});\r\n          return of(err);\r\n        }\r\n        if (err.status === 500) {\r\n          this._snackBar.open(`Status ${err.status}. Internal Server Error`, '', {duration: 3000});\r\n          return of(err);\r\n        }\r\n        return throwError(err);\r\n      })\r\n    );\r\n  }\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "_authFacade",
+                        "type": "AuthFacade",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "_snackBar",
+                        "type": "MatSnackBar",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 9,
+                "jsdoctags": [
+                    {
+                        "name": "_authFacade",
+                        "type": "AuthFacade",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "_snackBar",
+                        "type": "MatSnackBar",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "interceptor"
+        }
+    ],
+    "classes": [],
+    "directives": [],
+    "components": [
+        {
+            "name": "AppComponent",
+            "id": "component-AppComponent-8fbd201a1f2a344dde9a7dc241c39c5c",
+            "file": "src/app/app.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "acoach-app-root",
+            "styleUrls": [
+                "./app.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./app.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  templateUrl: './app.component.html',\n  styleUrls: ['./app.component.scss']\n})\nexport class AppComponent {\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./app.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "templateData": "<router-outlet></router-outlet>\n"
+        },
+        {
+            "name": "DashboardComponent",
+            "id": "component-DashboardComponent-371055a748e1f2f5b716b5ad17e16e5c",
+            "file": "src/app/modules/dashboard/components/dashboard/dashboard.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "acoach-dashboard",
+            "styleUrls": [
+                "./dashboard.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./dashboard.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "userDetails$",
+                    "defaultValue": "this._authFacade.getUserDetails()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Observable<IUserDetails>",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "logout",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 19,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 16,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport {AuthFacade} from \"@acoach/data-access/auth/auth.facade\";\nimport {Observable} from \"rxjs\";\nimport {IUserDetails} from \"@acoach/models/auth/auth.interface\";\n\n@Component({\n  selector: 'acoach-dashboard',\n  templateUrl: './dashboard.component.html',\n  styleUrls: ['./dashboard.component.scss']\n})\nexport class DashboardComponent implements OnInit {\n  userDetails$: Observable<IUserDetails> = this._authFacade.getUserDetails();\n\n  constructor(private _authFacade: AuthFacade) { }\n\n  ngOnInit(): void {\n  }\n\n  logout(): void {\n    this._authFacade.logout();\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "section {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  flex-direction: column;\r\n}\r\n",
+                    "styleUrl": "./dashboard.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "_authFacade",
+                        "type": "AuthFacade",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 12,
+                "jsdoctags": [
+                    {
+                        "name": "_authFacade",
+                        "type": "AuthFacade",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<section *ngIf=\"userDetails$ | async as user\">\n  <h1>Hi Mr. {{user.userDetails.firstname}} {{user.userDetails.lastname}}</h1>\n  <p>Territory number: {{user.userDetails.territoryNumber}}</p>\n  <p>Your session will expire in {{user.sessionDetails.expiryDate / 1000}} seconds</p>\n  <acoach-ui-button\n    type=\"standard\"\n    size=\"small\"\n    (btnClick)=\"logout()\"\n  >Logout</acoach-ui-button>\n</section>\n"
+        },
+        {
+            "name": "LoginComponent",
+            "id": "component-LoginComponent-700aa45279f7385c04fa13991c011f31",
+            "file": "src/app/modules/auth/components/login/login.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "acoach-login",
+            "styleUrls": [
+                "./login.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./login.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "emailFormControl",
+                    "defaultValue": "new FormControl('', [\n    Validators.required,\n    Validators.email,\n  ])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "login",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 21,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 18,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import {Component, OnInit} from '@angular/core';\nimport {AuthFacade} from \"@acoach/data-access/auth/auth.facade\";\nimport {FormControl, Validators} from \"@angular/forms\";\n\n@Component({\n  selector: 'acoach-login',\n  templateUrl: './login.component.html',\n  styleUrls: ['./login.component.scss']\n})\nexport class LoginComponent implements OnInit {\n  emailFormControl = new FormControl('', [\n    Validators.required,\n    Validators.email,\n  ]);\n\n  constructor(private _authFacade: AuthFacade) { }\n\n  ngOnInit(): void {\n  }\n\n  login(): void {\n    this._authFacade.login(this.emailFormControl.value)\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@use 'variables' as v;\r\n\r\nsection {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  flex-direction: column;\r\n\r\n  acoach-ui-input {\r\n    padding: v.$small 0;\r\n  }\r\n}\r\n",
+                    "styleUrl": "./login.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "_authFacade",
+                        "type": "AuthFacade",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 14,
+                "jsdoctags": [
+                    {
+                        "name": "_authFacade",
+                        "type": "AuthFacade",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<section>\n  <acoach-ui-input\n    (emailFormControlValue)=\"emailFormControl.patchValue($event)\"\n  ></acoach-ui-input>\n  <acoach-ui-button\n    [disabled]=\"!emailFormControl.valid\"\n    type=\"standard\"\n    size=\"small\"\n    (btnClick)=\"login()\"\n  >Submit</acoach-ui-button>\n</section>\n"
+        },
+        {
+            "name": "UiButtonComponent",
+            "id": "component-UiButtonComponent-bac7292f8bc0d7c291c22796c776d747",
+            "file": "src/@acoach/ui-base-components/ui-button/ui-button.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "acoach-ui-button",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./ui-button.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "disabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 10,
+                    "type": "boolean"
+                },
+                {
+                    "name": "size",
+                    "defaultValue": "'normal'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 9,
+                    "type": "\"small\" | \"normal\" | \"large\""
+                },
+                {
+                    "name": "type",
+                    "defaultValue": "'standard'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 8,
+                    "type": "\"standard\" | \"primary\""
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "btnClick",
+                    "defaultValue": "new EventEmitter<void>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 11,
+                    "type": "EventEmitter<void>"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 15,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';\n\n@Component({\n  selector: 'acoach-ui-button',\n  templateUrl: './ui-button.component.html'\n})\nexport class UiButtonComponent implements OnInit {\n  @Input() type: 'standard' | 'primary' = 'standard';\n  @Input() size: 'small' | 'normal' | 'large' = 'normal';\n  @Input() disabled: boolean = false;\n  @Output() btnClick: EventEmitter<void> = new EventEmitter<void>();\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 11
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<button\n  mat-stroked-button\n  [disabled]=\"disabled\"\n  [ngClass]=\"[type, size]\"\n  (click)=\"btnClick.emit()\"\n>\n  <ng-content></ng-content>\n</button>\n"
+        },
+        {
+            "name": "UiInputComponent",
+            "id": "component-UiInputComponent-03df2c7933ce9664235b6bf122faadb6",
+            "file": "src/@acoach/ui-base-components/ui-input/ui-input.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "acoach-ui-input",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./ui-input.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [
+                {
+                    "name": "emailFormControlValue",
+                    "defaultValue": "new EventEmitter<string>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 10,
+                    "type": "EventEmitter<string>"
+                }
+            ],
+            "propertiesClass": [
+                {
+                    "name": "_subscription",
+                    "defaultValue": "new Subscription()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Subscription",
+                    "optional": false,
+                    "description": "",
+                    "line": 17,
+                    "modifierKind": [
+                        121
+                    ]
+                },
+                {
+                    "name": "emailFormControl",
+                    "defaultValue": "new FormControl('', [\n    Validators.required,\n    Validators.email,\n  ])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnDestroy",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 28,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 22,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';\nimport {FormControl, Validators} from \"@angular/forms\";\nimport {Subscription} from \"rxjs\";\n\n@Component({\n  selector: 'acoach-ui-input',\n  templateUrl: './ui-input.component.html'\n})\nexport class UiInputComponent implements OnInit, OnDestroy {\n  @Output() emailFormControlValue: EventEmitter<string> = new EventEmitter<string>();\n\n  emailFormControl = new FormControl('', [\n    Validators.required,\n    Validators.email,\n  ]);\n\n  private _subscription: Subscription = new Subscription();\n\n\n  constructor() { }\n\n  ngOnInit(): void {\n    this._subscription.add(\n      this.emailFormControl.valueChanges.subscribe(email => this.emailFormControlValue.emit(email))\n    );\n  }\n\n  ngOnDestroy() {\n    this._subscription.unsubscribe();\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 17
+            },
+            "implements": [
+                "OnInit",
+                "OnDestroy"
+            ],
+            "templateData": "<form class=\"example-form\">\n  <mat-form-field class=\"example-full-width\" appearance=\"outline\">\n    <mat-label>Username</mat-label>\n    <input type=\"email\" matInput [formControl]=\"emailFormControl\" placeholder=\"Ex. pat@example.com\">\n    <button *ngIf=\"emailFormControl?.value\" matSuffix mat-icon-button aria-label=\"Clear\"\n            (click)=\"emailFormControl.setValue('')\">\n      <mat-icon>close</mat-icon>\n    </button>\n    <mat-error *ngIf=\"emailFormControl.hasError('email') && !emailFormControl.hasError('required')\">\n      Please enter a valid email address\n    </mat-error>\n    <mat-error *ngIf=\"emailFormControl.hasError('required')\">\n      Username is <strong>required</strong>\n    </mat-error>\n  </mat-form-field>\n</form>\n"
+        }
+    ],
+    "modules": [
+        {
+            "name": "AppModule",
+            "id": "module-AppModule-baeb9c4571ec9b6e5638eda7e54da292",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/app.module.ts",
+            "methods": [],
+            "sourceCode": "import {NgModule} from '@angular/core';\nimport {BrowserModule} from '@angular/platform-browser';\nimport {AppRoutingModule} from './app-routing.module';\nimport {AppComponent} from './app.component';\nimport {BrowserAnimationsModule} from '@angular/platform-browser/animations';\nimport {ActionReducerMap, StoreModule} from \"@ngrx/store\";\nimport {HTTP_INTERCEPTORS, HttpClientModule} from \"@angular/common/http\";\nimport {TokenInterceptor} from \"@acoach/interceptors/token.interceptor\";\nimport {IAppState} from \"@acoach/data-access/app.state\";\nimport {routerReducer, RouterState, StoreRouterConnectingModule} from \"@ngrx/router-store\";\nimport {AuthEffects} from \"@acoach/data-access/auth/auth.effects\";\nimport {EffectsModule} from \"@ngrx/effects\";\nimport {StoreDevtoolsModule} from \"@ngrx/store-devtools\";\nimport {environment} from \"@environments/environment\";\nimport * as fromAuth from '@acoach/data-access/auth/auth.reducer';\nimport {MatSnackBarModule} from \"@angular/material/snack-bar\";\n\nconst reducers: ActionReducerMap<IAppState> = {\n  ['router']: routerReducer,\n  [fromAuth.authFeatureKey]: fromAuth.reducer,\n};\n\nconst effects = [\n  AuthEffects\n];\n\nexport function getReducers(): ActionReducerMap<IAppState> {\n  return reducers;\n}\n\n@NgModule({\n  declarations: [\n    AppComponent\n  ],\n  imports: [\n    BrowserModule,\n    AppRoutingModule,\n    MatSnackBarModule,\n    BrowserAnimationsModule,\n    HttpClientModule,\n    StoreModule.forRoot(\n      {...getReducers()},\n      {\n        metaReducers: [fromAuth.clearState],\n        runtimeChecks: {\n          strictActionImmutability: true,\n          strictStateImmutability: true\n        }\n      }\n    ),\n    StoreRouterConnectingModule.forRoot({\n      routerState: RouterState.Minimal\n    }),\n    EffectsModule.forRoot(effects),\n    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),\n  ],\n  providers: [\n    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}\n  ],\n  bootstrap: [AppComponent]\n})\nexport class AppModule {\n}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "TokenInterceptor"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "AppRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AppRoutingModule",
+            "id": "module-AppRoutingModule-f1b377bacb6e49fec642bc8cae41ac07",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/app-routing.module.ts",
+            "methods": [],
+            "sourceCode": "import {NgModule} from '@angular/core';\nimport {RouterModule, Routes} from '@angular/router';\nimport {AuthGuard} from \"@acoach/guards/auth.guard\";\n\nconst routes: Routes = [\n  {\n    path: '',\n    redirectTo: '/auth/login',\n    pathMatch: 'full'\n  },\n  {\n    path: 'auth',\n    loadChildren: () => \"import('./modules/auth/auth.module').then(\\\n      (module) => module.AuthModule)\"\n  },\n  {\n    path: 'dashboard',\n    loadChildren: () => \"import('./modules/dashboard/dashboard.module').then(\\\n      (module) => module.DashboardModule)\",\n    canActivate: [AuthGuard]\n  },\n  {\n    path: '**',\n    redirectTo: '/auth/login',\n    pathMatch: 'full'\n  },\n];\n\n@NgModule({\n  imports: [RouterModule.forRoot(routes)],\n  exports: [RouterModule]\n})\nexport class AppRoutingModule {\n}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AuthModule",
+            "id": "module-AuthModule-d10f57daacd7c6addc628401d08ebe5f",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/modules/auth/auth.module.ts",
+            "methods": [],
+            "sourceCode": "import {NgModule} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {RouterModule, Routes} from \"@angular/router\";\n\nconst routes: Routes = [\n  {\n    path: 'login',\n    loadChildren: () => \"import('./components/login/login.module').then(\\\n      (module) => module.LoginModule)\"\n  },\n];\n\n@NgModule({\n  imports: [\n    CommonModule,\n    RouterModule.forChild(routes)\n  ]\n})\nexport class AuthModule {\n}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "DashboardModule",
+            "id": "module-DashboardModule-a91a6d5ddbe60dfe12ab91bbecfbe78c",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/modules/dashboard/dashboard.module.ts",
+            "methods": [],
+            "sourceCode": "import {NgModule} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {RouterModule, Routes} from '@angular/router';\nimport {UiBaseComponentsModule} from \"@acoach/ui-base-components/ui-base-components.module\";\nimport {DashboardComponent} from \"@app/modules/dashboard/components/dashboard/dashboard.component\";\n\nconst routes: Routes = [\n  {\n    path: '',\n    component: DashboardComponent\n  }\n];\n\n@NgModule({\n  declarations: [\n    DashboardComponent\n  ],\n  imports: [\n    CommonModule,\n    RouterModule.forChild(routes),\n    UiBaseComponentsModule\n  ]\n})\nexport class DashboardModule {\n}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "DashboardComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "LoginModule",
+            "id": "module-LoginModule-2e8be3bac2a93f704a20ec0e1df13634",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/modules/auth/components/login/login.module.ts",
+            "methods": [],
+            "sourceCode": "import {NgModule} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {LoginComponent} from './login.component';\nimport {RouterModule, Routes} from '@angular/router';\nimport {UiBaseComponentsModule} from \"@acoach/ui-base-components/ui-base-components.module\";\n\nconst routes: Routes = [\n  {\n    path: '',\n    component: LoginComponent\n  }\n];\n\n@NgModule({\n  declarations: [\n    LoginComponent\n  ],\n  imports: [\n    CommonModule,\n    RouterModule.forChild(routes),\n    UiBaseComponentsModule\n  ]\n})\nexport class LoginModule {\n}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "LoginComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "UiBaseComponentsModule",
+            "id": "module-UiBaseComponentsModule-82e83b708a8e2db027b39c420761c2c1",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/@acoach/ui-base-components/ui-base-components.module.ts",
+            "methods": [],
+            "sourceCode": "import {NgModule} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {UiButtonComponent} from './ui-button/ui-button.component';\nimport {MatIconModule} from \"@angular/material/icon\";\nimport {MatButtonModule} from \"@angular/material/button\";\nimport {UiInputComponent} from \"./ui-input/ui-input.component\";\nimport {MatFormFieldModule} from \"@angular/material/form-field\";\nimport {MatInputModule} from \"@angular/material/input\";\nimport {FormsModule, ReactiveFormsModule} from \"@angular/forms\";\n\nconst components = [\n  UiButtonComponent,\n  UiInputComponent\n]\n\n@NgModule({\n  declarations: components,\n  exports: components,\n  imports: [\n    CommonModule,\n    MatIconModule,\n    MatButtonModule,\n    MatFormFieldModule,\n    MatInputModule,\n    FormsModule,\n    ReactiveFormsModule\n  ]\n})\nexport class UiBaseComponentsModule {\n}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "UiButtonComponent"
+                        },
+                        {
+                            "name": "UiInputComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "UiButtonComponent"
+                        },
+                        {
+                            "name": "UiInputComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "UiBusinessComponentsModule",
+            "id": "module-UiBusinessComponentsModule-1f07632ee684c092adaef3a98e0799a4",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/@acoach/ui-business-components/ui-business-components.module.ts",
+            "methods": [],
+            "sourceCode": "import { NgModule } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n\n\n@NgModule({\n  declarations: [],\n  imports: [\n    CommonModule\n  ]\n})\nexport class UiBusinessComponentsModule { }\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "authFeatureKey",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "string",
+                "defaultValue": "'auth'"
+            },
+            {
+                "name": "authInitialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "IAuthState",
+                "defaultValue": "{\r\n  loading: false,\r\n  error: null,\r\n  username: '',\r\n  userDetails: null,\r\n}"
+            },
+            {
+                "name": "authReducer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createReducer(\r\n  authInitialState,\r\n  on(fromAuthActions.clearState, state => ({...state, loading: false, isError: null})),\r\n\r\n  on(fromAuthActions.login, (state, {username}) => ({...state, loading: true, username})),\r\n  on(fromAuthActions.loginSuccess, (state, {userDetails}) => ({...state, loading: false, userDetails})),\r\n  on(fromAuthActions.loginError, (state, {error}) => ({...state, loading: false, error})),\r\n)"
+            },
+            {
+                "name": "clearState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.actions.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction('[AUTH] clear state')"
+            },
+            {
+                "name": "components",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/ui-base-components/ui-base-components.module.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "[]",
+                "defaultValue": "[\n  UiButtonComponent,\n  UiInputComponent\n]"
+            },
+            {
+                "name": "effects",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.module.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "[]",
+                "defaultValue": "[\n  AuthEffects\n]"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  production: false,\n  API_BASE_URL: ''\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  production: true,\n  API_BASE_URL: ''\n}"
+            },
+            {
+                "name": "getIsError",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.selectors.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createSelector(selectBaseFeature, (state: fromAuthReducer.IAuthState) => state.error)"
+            },
+            {
+                "name": "getIsLoading",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.selectors.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createSelector(selectBaseFeature, (state: fromAuthReducer.IAuthState) => state.loading)"
+            },
+            {
+                "name": "getUserDetails",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.selectors.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createSelector(selectBaseFeature, (state: fromAuthReducer.IAuthState) => state.userDetails)"
+            },
+            {
+                "name": "login",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.actions.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction('[AUTH] login', props<{ username: string }>())"
+            },
+            {
+                "name": "loginError",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.actions.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction('[AUTH] login error', props<{ error: HttpErrorResponse }>())"
+            },
+            {
+                "name": "loginSuccess",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.actions.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction('[AUTH] login success', props<{ userDetails: IUserDetails }>())"
+            },
+            {
+                "name": "reducers",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.module.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ActionReducerMap<IAppState>",
+                "defaultValue": "{\n  ['router']: routerReducer,\n  [fromAuth.authFeatureKey]: fromAuth.reducer,\n}"
+            },
+            {
+                "name": "routeFeatureKey",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/route/route.selectors.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "string",
+                "defaultValue": "'router'"
+            },
+            {
+                "name": "selectBaseFeature",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/auth/auth.selectors.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createFeatureSelector<fromAuthReducer.IAuthState>(fromAuthReducer.authFeatureKey)"
+            },
+            {
+                "name": "selectRouteOutletPath",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/route/route.selectors.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createSelector(selectCurrentRoute, currentRoute =>\r\n  currentRoute.routeConfig.outlet ? currentRoute.routeConfig.path : ''\r\n)"
+            },
+            {
+                "name": "selectRouter",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/route/route.selectors.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createFeatureSelector<IRouterState, fromRouter.RouterReducerState>(routeFeatureKey)"
+            },
+            {
+                "name": "UIButton",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/ui-base-components/ui-button/ui-button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "() => ({\n  moduleMetadata: {\n    imports: [UiBaseComponentsModule],\n  },\n  template: `<div style=\"width: 200px; padding: 10px;\">\n   <p>Standard small</p>\n   <acoach-ui-button\n    type=\"standard\"\n    size=\"small\"\n  >Submit</acoach-ui-button>\n  </div>\n\n  <div style=\"width: 200px; padding: 10px;\">\n   <p>Primary small</p>\n   <acoach-ui-button\n    type=\"primary\"\n    size=\"small\"\n  >Submit</acoach-ui-button>\n  </div>\n\n  <div style=\"width: 200px; padding: 10px;\">\n   <p>Standard normal</p>\n   <acoach-ui-button\n    type=\"standard\"\n    size=\"normal\"\n  >Submit</acoach-ui-button>\n  </div>\n\n    <div style=\"width: 200px; padding: 10px;\">\n   <p>Standard large</p>\n   <acoach-ui-button\n    type=\"standard\"\n    size=\"large\"\n  >Submit</acoach-ui-button>\n  </div>\n\n      <div style=\"width: 200px; padding: 10px;\">\n   <p>Large disabled</p>\n   <acoach-ui-button\n   [disabled]=\"true\"\n    type=\"standard\"\n    size=\"large\"\n  >Submit</acoach-ui-button>\n  </div>\n`,\n})"
+            },
+            {
+                "name": "UIInput",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/ui-base-components/ui-input/ui-input.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "() => ({\n  moduleMetadata: {\n    imports: [\n      UiBaseComponentsModule,\n      MatIconModule,\n      MatFormFieldModule,\n      MatInputModule,\n      FormsModule,\n      ReactiveFormsModule,\n      BrowserAnimationsModule\n    ],\n  },\n  template: `<div style=\"width: 200px; padding: 10px;\">\n  <acoach-ui-input></acoach-ui-input>\n  </div>\n`,\n})"
+            },
+            {
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/@acoach/data-access/route/route.selectors.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "fromRouter.getSelectors(selectRouter)"
+            }
+        ],
+        "functions": [
+            {
+                "name": "clearState",
+                "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "args": [
+                    {
+                        "name": "red",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "red",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "getReducers",
+                "file": "src/app/app.module.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "args": [],
+                "returnType": "ActionReducerMap<IAppState>"
+            },
+            {
+                "name": "reducer",
+                "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "args": [
+                    {
+                        "name": "state",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "action",
+                        "type": "Action",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "returnType": "IAuthState",
+                "jsdoctags": [
+                    {
+                        "name": "state",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "type": "Action",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        ],
+        "typealiases": [],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/@acoach/data-access/auth/auth.reducer.ts": [
+                {
+                    "name": "authFeatureKey",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "defaultValue": "'auth'"
+                },
+                {
+                    "name": "authInitialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "IAuthState",
+                    "defaultValue": "{\r\n  loading: false,\r\n  error: null,\r\n  username: '',\r\n  userDetails: null,\r\n}"
+                },
+                {
+                    "name": "authReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n  authInitialState,\r\n  on(fromAuthActions.clearState, state => ({...state, loading: false, isError: null})),\r\n\r\n  on(fromAuthActions.login, (state, {username}) => ({...state, loading: true, username})),\r\n  on(fromAuthActions.loginSuccess, (state, {userDetails}) => ({...state, loading: false, userDetails})),\r\n  on(fromAuthActions.loginError, (state, {error}) => ({...state, loading: false, error})),\r\n)"
+                }
+            ],
+            "src/@acoach/data-access/auth/auth.actions.ts": [
+                {
+                    "name": "clearState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.actions.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction('[AUTH] clear state')"
+                },
+                {
+                    "name": "login",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.actions.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction('[AUTH] login', props<{ username: string }>())"
+                },
+                {
+                    "name": "loginError",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.actions.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction('[AUTH] login error', props<{ error: HttpErrorResponse }>())"
+                },
+                {
+                    "name": "loginSuccess",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.actions.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction('[AUTH] login success', props<{ userDetails: IUserDetails }>())"
+                }
+            ],
+            "src/@acoach/ui-base-components/ui-base-components.module.ts": [
+                {
+                    "name": "components",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/ui-base-components/ui-base-components.module.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "[]",
+                    "defaultValue": "[\n  UiButtonComponent,\n  UiInputComponent\n]"
+                }
+            ],
+            "src/app/app.module.ts": [
+                {
+                    "name": "effects",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.module.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "[]",
+                    "defaultValue": "[\n  AuthEffects\n]"
+                },
+                {
+                    "name": "reducers",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.module.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ActionReducerMap<IAppState>",
+                    "defaultValue": "{\n  ['router']: routerReducer,\n  [fromAuth.authFeatureKey]: fromAuth.reducer,\n}"
+                }
+            ],
+            "src/environments/environment.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  production: false,\n  API_BASE_URL: ''\n}"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  production: true,\n  API_BASE_URL: ''\n}"
+                }
+            ],
+            "src/@acoach/data-access/auth/auth.selectors.ts": [
+                {
+                    "name": "getIsError",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.selectors.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createSelector(selectBaseFeature, (state: fromAuthReducer.IAuthState) => state.error)"
+                },
+                {
+                    "name": "getIsLoading",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.selectors.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createSelector(selectBaseFeature, (state: fromAuthReducer.IAuthState) => state.loading)"
+                },
+                {
+                    "name": "getUserDetails",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.selectors.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createSelector(selectBaseFeature, (state: fromAuthReducer.IAuthState) => state.userDetails)"
+                },
+                {
+                    "name": "selectBaseFeature",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/auth/auth.selectors.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<fromAuthReducer.IAuthState>(fromAuthReducer.authFeatureKey)"
+                }
+            ],
+            "src/@acoach/data-access/route/route.selectors.ts": [
+                {
+                    "name": "routeFeatureKey",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/route/route.selectors.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "defaultValue": "'router'"
+                },
+                {
+                    "name": "selectRouteOutletPath",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/route/route.selectors.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createSelector(selectCurrentRoute, currentRoute =>\r\n  currentRoute.routeConfig.outlet ? currentRoute.routeConfig.path : ''\r\n)"
+                },
+                {
+                    "name": "selectRouter",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/route/route.selectors.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<IRouterState, fromRouter.RouterReducerState>(routeFeatureKey)"
+                },
+                {
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/data-access/route/route.selectors.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "fromRouter.getSelectors(selectRouter)"
+                }
+            ],
+            "src/@acoach/ui-base-components/ui-button/ui-button.stories.ts": [
+                {
+                    "name": "UIButton",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/ui-base-components/ui-button/ui-button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "() => ({\n  moduleMetadata: {\n    imports: [UiBaseComponentsModule],\n  },\n  template: `<div style=\"width: 200px; padding: 10px;\">\n   <p>Standard small</p>\n   <acoach-ui-button\n    type=\"standard\"\n    size=\"small\"\n  >Submit</acoach-ui-button>\n  </div>\n\n  <div style=\"width: 200px; padding: 10px;\">\n   <p>Primary small</p>\n   <acoach-ui-button\n    type=\"primary\"\n    size=\"small\"\n  >Submit</acoach-ui-button>\n  </div>\n\n  <div style=\"width: 200px; padding: 10px;\">\n   <p>Standard normal</p>\n   <acoach-ui-button\n    type=\"standard\"\n    size=\"normal\"\n  >Submit</acoach-ui-button>\n  </div>\n\n    <div style=\"width: 200px; padding: 10px;\">\n   <p>Standard large</p>\n   <acoach-ui-button\n    type=\"standard\"\n    size=\"large\"\n  >Submit</acoach-ui-button>\n  </div>\n\n      <div style=\"width: 200px; padding: 10px;\">\n   <p>Large disabled</p>\n   <acoach-ui-button\n   [disabled]=\"true\"\n    type=\"standard\"\n    size=\"large\"\n  >Submit</acoach-ui-button>\n  </div>\n`,\n})"
+                }
+            ],
+            "src/@acoach/ui-base-components/ui-input/ui-input.stories.ts": [
+                {
+                    "name": "UIInput",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/@acoach/ui-base-components/ui-input/ui-input.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "() => ({\n  moduleMetadata: {\n    imports: [\n      UiBaseComponentsModule,\n      MatIconModule,\n      MatFormFieldModule,\n      MatInputModule,\n      FormsModule,\n      ReactiveFormsModule,\n      BrowserAnimationsModule\n    ],\n  },\n  template: `<div style=\"width: 200px; padding: 10px;\">\n  <acoach-ui-input></acoach-ui-input>\n  </div>\n`,\n})"
+                }
+            ]
+        },
+        "groupedFunctions": {
+            "src/@acoach/data-access/auth/auth.reducer.ts": [
+                {
+                    "name": "clearState",
+                    "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "red",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "red",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "reducer",
+                    "file": "src/@acoach/data-access/auth/auth.reducer.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "state",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "action",
+                            "type": "Action",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "returnType": "IAuthState",
+                    "jsdoctags": [
+                        {
+                            "name": "state",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "action",
+                            "type": "Action",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "src/app/app.module.ts": [
+                {
+                    "name": "getReducers",
+                    "file": "src/app/app.module.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "args": [],
+                    "returnType": "ActionReducerMap<IAppState>"
+                }
+            ]
+        },
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {}
+    },
+    "routes": {
+        "name": "<root>",
+        "kind": "module",
+        "className": "AppModule",
+        "children": [
+            {
+                "name": "routes",
+                "filename": "src/app/app-routing.module.ts",
+                "module": "AppRoutingModule",
+                "children": [
+                    {
+                        "path": "",
+                        "redirectTo": "/auth/login",
+                        "pathMatch": "full"
+                    },
+                    {
+                        "path": "auth",
+                        "loadChildren": "./modules/auth/auth.module#AuthModule",
+                        "children": [
+                            {
+                                "kind": "module",
+                                "children": [
+                                    {
+                                        "name": "routes",
+                                        "filename": "src/app/modules/auth/auth.module.ts",
+                                        "module": "AuthModule",
+                                        "children": [
+                                            {
+                                                "path": "login",
+                                                "loadChildren": "./components/login/login.module#LoginModule",
+                                                "children": [
+                                                    {
+                                                        "kind": "module",
+                                                        "children": [],
+                                                        "module": "LoginModule"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "kind": "module"
+                                    }
+                                ],
+                                "module": "AuthModule"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "dashboard",
+                        "loadChildren": "./modules/dashboard/dashboard.module#DashboardModule",
+                        "canActivate": [
+                            "AuthGuard"
+                        ],
+                        "children": [
+                            {
+                                "kind": "module",
+                                "children": [
+                                    {
+                                        "name": "routes",
+                                        "filename": "src/app/modules/dashboard/dashboard.module.ts",
+                                        "module": "DashboardModule",
+                                        "children": [
+                                            {
+                                                "path": "",
+                                                "component": "DashboardComponent"
+                                            }
+                                        ],
+                                        "kind": "module"
+                                    }
+                                ],
+                                "module": "DashboardModule"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "**",
+                        "redirectTo": "/auth/login",
+                        "pathMatch": "full"
+                    }
+                ],
+                "kind": "module"
+            }
+        ]
+    },
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "src/@acoach/data-access/app.state.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "IAppState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "clearState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "login",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginError",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginSuccess",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.effects.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "AuthEffects",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.facade.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "AuthFacade",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "IAuthState",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "type": "function",
+                "linktype": "miscellaneous",
+                "linksubtype": "function",
+                "name": "clearState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "type": "function",
+                "linktype": "miscellaneous",
+                "linksubtype": "function",
+                "name": "reducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "authFeatureKey",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "authInitialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "authReducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.selectors.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getIsError",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.selectors.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getIsLoading",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.selectors.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getUserDetails",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/auth.selectors.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "selectBaseFeature",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/auth/service/auth.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "AuthService",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/route/route.selectors.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "IRouterState",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/route/route.selectors.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "routeFeatureKey",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/route/route.selectors.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "selectRouteOutletPath",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/route/route.selectors.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "selectRouter",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/data-access/route/route.selectors.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/guards/auth.guard.ts",
+                "type": "guard",
+                "linktype": "guard",
+                "name": "AuthGuard",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/interceptors/token.interceptor.ts",
+                "type": "interceptor",
+                "linktype": "interceptor",
+                "name": "TokenInterceptor",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/models/auth/auth.interface.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "ISession",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/models/auth/auth.interface.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "IUser",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/models/auth/auth.interface.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "IUserDetails",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/ui-base-components/ui-base-components.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "components",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/ui-base-components/ui-button/ui-button.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "UiButtonComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/ui-base-components/ui-button/ui-button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "UIButton",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/ui-base-components/ui-input/ui-input.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "UiInputComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/@acoach/ui-base-components/ui-input/ui-input.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "UIInput",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AppComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.module.ts",
+                "type": "function",
+                "linktype": "miscellaneous",
+                "linksubtype": "function",
+                "name": "getReducers",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "effects",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "reducers",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/modules/auth/components/login/login.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LoginComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/modules/dashboard/components/dashboard/dashboard.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DashboardComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.prod.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}
